@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>尼玛豹哥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="尼玛豹哥">
+<meta property="og:url" content="http://blog.yangxc.com/page/5/index.html">
+<meta property="og:site_name" content="尼玛豹哥">
+<meta property="og:locale">
+<meta property="article:author" content="YangXC">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="尼玛豹哥" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="blog-header">
+  <img src="/images/avatar.jpg">
+  <div id="blog-title">尼玛豹哥</div>
+</div>
+<hr id="header-line">
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-about-hbase" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/03/about-hbase/">hbase使用笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/08/03/about-hbase/" class="article-date">
+  <time datetime="2017-08-03T03:17:29.000Z" itemprop="datePublished">2017-08-03</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>记完hive后来点hbase的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sqoop import --connect <span class="string">&#x27;jdbc:sqlserver://192.168.1.xxx;username=sa;password=xxx;DatabaseName=xxx&#x27;</span> --table sourcetablename --hbase-table hbasetablename --column-family cfname --split-by keycolumn --hbase-row-key rowkeycolumn --hbase-create-table</span></span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-about-sqoop" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/18/about-sqoop/">Sqoop使用笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/07/18/about-sqoop/" class="article-date">
+  <time datetime="2017-07-18T00:45:29.000Z" itemprop="datePublished">2017-07-18</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>CDH装完后想通过sqoop2来把数据导入hive，结果发现导数据的过程中，虽然生成了10个map，但其中9个map都是空的，导致最后生成了9个0大小的文件和一个巨大的文件，没找到原因，只在官网找到这么一句话 <code>Note that 1.99.7 is not compatible with 1.4.6 and not feature complete, it is not intended for production deployment.</code></p>
+<p>好吧，那我就不挣扎了，用Sqoop 1.4.6吧。把使用过程记录下来，以备后查：</p>
+<ul>
+<li>首先，去微软官网下载个sqlserver的jdbc驱动jar包，把它放在/var/lib/sqoop/下面。</li>
+<li>查看数据库  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sqoop list-databases --connect <span class="string">&#x27;jdbc:sqlserver://192.168.1.xxx;username=sa;password=xxx&#x27;</span></span></span><br></pre></td></tr></table></figure></li>
+<li>导入一个库中的所有表，不过前提是这些表都有主键，按理说参数里应该有指定数据库名字的方法，我没找到，发现强行写在连接字符串里也行  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sqoop import-all-tables --connect <span class="string">&#x27;jdbc:sqlserver://192.168.1.xxx;username=sa;password=xxx;DatabaseName=XXX&#x27;</span> --hive-import</span></span><br></pre></td></tr></table></figure></li>
+<li>导入一个表，在这个表没有主键的情况下，可以用–split-by参数来指定，同样我也还是不知道怎么用参数来指定数据库名字  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sqoop import --connect <span class="string">&#x27;jdbc:sqlserver://192.168.1.xxx;username=sa;password=xxx;DatabaseName=XXX&#x27;</span> --table tablename --split-by split_column --hive-import</span></span><br></pre></td></tr></table></figure></li>
+<li>导完后发现数据比原数据库多了一半，真蛋疼，研究之后发现，原来是因为我原表中有文本字段，有不少逗号和\n，而hive默认是使用逗号来作为字段分隔符，\n来作为行分隔符，所以还是需要加上quote来保证不被切割  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sqoop import --connect <span class="string">&#x27;jdbc:sqlserver://192.168.1.xxx;username=sa;password=xxx;DatabaseName=XXX&#x27;</span> --table tablename --split-by split_column --hive-import --fields-terminated-by , --escaped-by \\ --enclosed-by <span class="string">&#x27;\&quot;&#x27;</span></span></span><br></pre></td></tr></table></figure></li>
+<li>上面的方法中，所有的字段都会被加上<code>&quot;&quot;</code>包括起来，其实也挺浪费空间的，使用另外一个参数 <code>--optionally-enclosed-by &#39;\&quot;&#39;</code>来代替 <code>--enclosed-by &#39;\&quot;&#39;</code>，就会自动用引号括起需要的字段，别的字段还是原样裸的。</li>
+</ul>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-install-cdh-on-centos6" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/16/install-cdh-on-centos6/">CentOS 6.7 安装 CDH 5.7 笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/07/16/install-cdh-on-centos6/" class="article-date">
+  <time datetime="2017-07-16T14:03:04.000Z" itemprop="datePublished">2017-07-16</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="本笔记适用于-CentOS-6-7-CDH-5-7-0-的部署"><a href="#本笔记适用于-CentOS-6-7-CDH-5-7-0-的部署" class="headerlink" title="本笔记适用于 CentOS 6.7 + CDH 5.7.0 的部署"></a><font color="red"><strong>本笔记适用于 CentOS 6.7 + CDH 5.7.0 的部署</strong></font></h3><h1 id="1、网络配置及基础组件安装"><a href="#1、网络配置及基础组件安装" class="headerlink" title="1、网络配置及基础组件安装"></a>1、网络配置及基础组件安装</h1><p>打开网络，配hostname</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> vi /etc/sysconfig/network</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">NETWORKING</span>=<span class="literal">yes</span></span><br><span class="line"><span class="attr">HOSTNAME</span>=master</span><br></pre></td></tr></table></figure>
+<p>配置IP地址</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> vi /etc/sysconfig/network-scripts/ifcfg-eth0</span></span><br></pre></td></tr></table></figure>
+<p>网络调通后，安装必要组件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> yum install psmisc libxslt-devel</span></span><br></pre></td></tr></table></figure>
+<p>关闭防火墙</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service iptables stop</span><br><span class="line">chkconfig iptables off</span><br></pre></td></tr></table></figure>
+<h1 id="2、设置SSH无密码访问"><a href="#2、设置SSH无密码访问" class="headerlink" title="2、设置SSH无密码访问"></a>2、设置SSH无密码访问</h1><p>在每台机器上执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ssh-keygen -t rsa</span></span><br></pre></td></tr></table></figure>
+<p>一路回车到底</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> chmod 600 ~/.ssh/authorized_keys</span></span><br></pre></td></tr></table></figure>
+<p>把所有机器的key文件放到master机器上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> scp /root/.ssh/id_rsa.pub root@master:/root/.ssh/机器名_id_rsa.pub</span></span><br></pre></td></tr></table></figure>
+<p>在master上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat /root/.ssh/机器1_id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> cat /root/.ssh/机器2_id_rsa.pub &gt;&gt; /root/.ssh/authorized_keys</span></span><br></pre></td></tr></table></figure>
+<p>最终再把authorized_keys放到每台机器上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> scp /root/.ssh/authorized_keys root@机器名:/root/.ssh/</span></span><br></pre></td></tr></table></figure>
+<h1 id="3、关闭SELINUX（官方文档上有这一步，实陆发现不做也行）"><a href="#3、关闭SELINUX（官方文档上有这一步，实陆发现不做也行）" class="headerlink" title="3、关闭SELINUX（官方文档上有这一步，实陆发现不做也行）"></a>3、关闭SELINUX（官方文档上有这一步，实陆发现不做也行）</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> setenforce 0</span></span><br><span class="line">```修改文件 `/etc/selinux/config`</span><br><span class="line">```Ini</span><br><span class="line">SELINUX=disabled</span><br></pre></td></tr></table></figure>
+<p>重启</p>
+<h1 id="4、安装mysql，建库，hive-hue-oozie"><a href="#4、安装mysql，建库，hive-hue-oozie" class="headerlink" title="4、安装mysql，建库，hive hue oozie"></a>4、安装mysql，建库，hive hue oozie</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> yum install -y mysql-server mysql mysql-devel</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> service mysqld start</span></span><br></pre></td></tr></table></figure>
+<p>设置数据库密码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mysql_secure_installation</span></span><br></pre></td></tr></table></figure>
+<p>建库</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> hive <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> hue <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> oozie <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> amon <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci;</span><br><span class="line"></span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">privileges</span> <span class="keyword">on</span> *.* <span class="keyword">to</span><span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;master&#x27;</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">&#x27;ddssoft&#x27;</span> <span class="keyword">with</span> <span class="keyword">grant</span> <span class="keyword">option</span>;</span><br><span class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="5、安装ntp"><a href="#5、安装ntp" class="headerlink" title="5、安装ntp"></a>5、安装ntp</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> yum install ntp</span></span><br></pre></td></tr></table></figure>
+<p>在这里，我们使用master作为集群的时间同步服务器，修改master上的ntp配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> vi /etc/ntp.conf</span></span><br></pre></td></tr></table></figure>
+<p>首先加上这一句，允许内网的机器从本机同步时间</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap</span><br></pre></td></tr></table></figure>
+<p>再把原有的server全部注释掉，换成</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server 210.72.145.44 perfer</span><br><span class="line">server 202.112.10.36</span><br><span class="line">server 59.124.196.83</span><br><span class="line">restrict 210.72.145.44 nomodify notrap noquery</span><br><span class="line">restrict 202.112.10.36 nomodify notrap noquery</span><br><span class="line">restrict 59.124.196.83 nomodify notrap noquery</span><br><span class="line"></span><br><span class="line">server 127.127.1.0</span><br><span class="line">fudge 127.127.1.0 stratum 10</span><br></pre></td></tr></table></figure>
+<p>保存退出后先同步一下时间，再打开ntp服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ntpdate 202.112.10.36</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> service ntpd start</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> chkconfig ntpd on</span></span><br></pre></td></tr></table></figure>
+<p>每台机器修改配置，把原有的server全部注释掉</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server master</span><br><span class="line">restrict master nomodify notrap noquery</span><br><span class="line"></span><br><span class="line">server 127.127.1.0</span><br><span class="line">fudge 127.127.1.0 stratum 10</span><br></pre></td></tr></table></figure>
+<p>保存退出后先同步一下时间，再打开ntp服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ntpdate master</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> service ntpd start</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> chkconfig ntpd on</span></span><br></pre></td></tr></table></figure>
+<h1 id="6、安装jdk，从oracle下载1-7u80下载"><a href="#6、安装jdk，从oracle下载1-7u80下载" class="headerlink" title="6、安装jdk，从oracle下载1.7u80下载"></a>6、安装jdk，从oracle下载1.7u80下载</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> rpm -ivh jdk-7u80-linux-x64.rpm</span></span><br></pre></td></tr></table></figure>
+<p>修改profile</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> vi /etc/profile</span></span><br></pre></td></tr></table></figure>
+<p>添加以下内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/java/default</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br></pre></td></tr></table></figure>
+<p>立即应用一下profile</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">source</span> /etc/profile</span></span><br></pre></td></tr></table></figure>
+<h1 id="7、下载CDH并部署"><a href="#7、下载CDH并部署" class="headerlink" title="7、下载CDH并部署"></a>7、下载CDH并部署</h1><p>下载压缩包：<code>http://archive.cloudera.com/cm5/cm/5/cloudera-manager-el6-cm5.7.0_x86_64.tar.gz</code> 并解压:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> tar -xzvf cloudera-manager-el6-cm5.7.0_x86_64.tar.gz</span></span><br></pre></td></tr></table></figure>
+<p>把解压后的文件夹拷贝至 <code>/opt/cloudera/</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mv cloudera cm-5.7.0 /opt/</span></span><br></pre></td></tr></table></figure>
+<p>下载三个文件：<code>http://archive.cloudera.com/cdh5/parcels/5.7.0/</code></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">CDH</span>-<span class="number">5</span>.<span class="number">7</span>.<span class="number">0</span>-<span class="number">1</span>.cdh<span class="number">5</span>.<span class="number">7</span>.<span class="number">0</span>.p<span class="number">0</span>.<span class="number">45</span>-el<span class="number">6</span>.parcel</span><br><span class="line"><span class="attribute">CDH</span>-<span class="number">5</span>.<span class="number">7</span>.<span class="number">0</span>-<span class="number">1</span>.cdh<span class="number">5</span>.<span class="number">7</span>.<span class="number">0</span>.p<span class="number">0</span>.<span class="number">45</span>-el<span class="number">6</span>.parcel.sha<span class="number">1</span></span><br><span class="line"><span class="attribute">manifest</span>.json</span><br></pre></td></tr></table></figure>
+<p>下载后把 <code>CDH-5.7.0-1.cdh5.7.0.p0.45-el6.parcel.sha1</code> 重命名为 <code>CDH-5.7.0-1.cdh5.7.0.p0.45-el6.parcel.sha</code></p>
+<p>再把三个文件拷到/opt/cloudera/parcel-repo/目录中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cp CDH-5.7.0-1.cdh5.7.0.p0.45-el6* manifest.json /opt/cloudera/parcel-repo/</span></span><br></pre></td></tr></table></figure>
+<p>我们把CM管理控制台安装在主节点，在master机器上操作<br>首先把mysql的JDBC驱动文件放到java的lib目录下，因为后面多次会用到，所以个人习惯感觉放这里好一些，<br>用winscp将 <code>mysql-connector-java-5.1.41-bin.jar</code> 放到 <code>/usr/java/default/lib/和/usr/java/default/jre/lib/</code><br>然后在cm管理台的文件夹下创建该驱动文件的链接，后面在别的组件里也会用到</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> /opt/cm-5.7.0/share/cmf/lib/</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ln /usr/java/default/jre/lib/mysql-connector-java-5.1.41-bin.jar ./ -s</span></span><br></pre></td></tr></table></figure>
+<p>然后初始化数据库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> /opt/cm-5.7.0/share/cmf/schema/</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./scm_prepare_database.sh mysql cm -hmaster -uroot -pddssoft --scm-host master scm scm scm</span></span><br></pre></td></tr></table></figure>
+<p>启动CM管理控制台服务端</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> /opt/cm-5.7.0/etc/init.d/cloudera-scm-server start</span></span><br></pre></td></tr></table></figure>
+<p>在所有机器上进行Agent配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> useradd --system --home=/opt/cm-5.7.0/run/cloudera-scm-server/ --no-create-home --shell=/bin/<span class="literal">false</span> --comment <span class="string">&quot;Cloudera SCM User&quot;</span> cloudera-scm</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> vi /opt/cm-5.7.0/etc/cloudera-scm-agent/config.ini</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> server_host=master</span></span><br></pre></td></tr></table></figure>
+<p>创建运行目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mkdir /opt/cm-5.7.0/run/cloudera-scm-agent</span></span><br></pre></td></tr></table></figure>
+<p>启动每台机器上的Agent</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> /opt/cm-5.7.0/etc/init.d/cloudera-scm-agent start</span></span><br></pre></td></tr></table></figure>
+<p>在每台机器上配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> 10 &gt; /proc/sys/vm/swappiness</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sysctl -w vm.swappiness=10</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> never &gt; /sys/kernel/mm/transparent_hugepage/defrag</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> never &gt; /sys/kernel/mm/transparent_hugepage/enabled</span></span><br></pre></td></tr></table></figure>
+<p>修改 <code>/etc/rc.local</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> vi /etc/rc.local</span></span><br></pre></td></tr></table></figure>
+<p>在最底下添加</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> never &gt; /sys/kernel/mm/transparent_hugepage/defrag</span><br><span class="line"><span class="built_in">echo</span> never &gt; /sys/kernel/mm/transparent_hugepage/enabled</span><br></pre></td></tr></table></figure>
+<h1 id="8、通过浏览器进行安装"><a href="#8、通过浏览器进行安装" class="headerlink" title="8、通过浏览器进行安装"></a>8、通过浏览器进行安装</h1><ul>
+<li><p>登录地址：<br><a target="_blank" rel="noopener" href="http://master1:7180/%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE">http://master1:7180/进行安装配置</a></p>
+</li>
+<li><p>在选择Hosts界面上，输入机器名：<code>master1,master2,node1,node2,node3,node4,node5</code></p>
+</li>
+<li><p>在接下来选择版本的界面上，一定要选 <code>CDH-5.7.0-1.cdh5.7.0.p0.45</code>，其它都默认，如果选错版本后面又要进入漫长的重新下载过程</p>
+</li>
+<li><p>JDK不要勾，我们已经安装过了</p>
+</li>
+<li><p>后面一路默认，在 <code>Provide SSH login credentials.</code> 界面输入root登录密码</p>
+</li>
+</ul>
+<p>在安装hive和oozie的过程中，需要输入mysql数据库信息，这时候检查数据库连接会不成功，需要单独处理一下mysql jdbc驱动。</p>
+<p>hive 数据库驱动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> /opt/cloudera/parcels/CDH-5.7.0-1.cdh5.7.0.p0.45/lib/hive/lib</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ln /usr/java/default/lib/mysql-connector-java-5.1.41-bin.jar ./ -s</span></span><br></pre></td></tr></table></figure>
+<p>oozie 数据库驱动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cp mysql-connector-java-5.1.41-bin.jar /usr/share/java/mysql-connector-java.jar</span></span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/4/">&lt; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    </nav>
+  
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/singlesword" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2021 YangXC 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/hejianxian/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/singlesword" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

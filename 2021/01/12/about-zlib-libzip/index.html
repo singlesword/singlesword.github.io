@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>关于windows下编译zlib和libzip | 尼玛豹哥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. 先安装cmake一路默认 2. 再编译zlib1cmake .. -G&quot;Visual Studio 16 2019&quot; -A&quot;Win32&quot; -DCMAKE_PREFIX_PATH&#x3D;&quot;C:&#x2F;Users&#x2F;singl&#x2F;Codes&#x2F;zip&quot; 去vs的命令行下编译 1msbuild &#x2F;P:Configuration&#x3D;Release INSTAL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于windows下编译zlib和libzip">
+<meta property="og:url" content="http://blog.yangxc.com/2021/01/12/about-zlib-libzip/index.html">
+<meta property="og:site_name" content="尼玛豹哥">
+<meta property="og:description" content="1. 先安装cmake一路默认 2. 再编译zlib1cmake .. -G&quot;Visual Studio 16 2019&quot; -A&quot;Win32&quot; -DCMAKE_PREFIX_PATH&#x3D;&quot;C:&#x2F;Users&#x2F;singl&#x2F;Codes&#x2F;zip&quot; 去vs的命令行下编译 1msbuild &#x2F;P:Configuration&#x3D;Release INSTAL">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-01-12T00:33:48.000Z">
+<meta property="article:modified_time" content="2021-04-13T02:59:22.286Z">
+<meta property="article:author" content="YangXC">
+<meta property="article:tag" content="windows">
+<meta property="article:tag" content="zlib">
+<meta property="article:tag" content="libzip">
+<meta property="article:tag" content="build">
+<meta property="article:tag" content="cmake">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="尼玛豹哥" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="blog-header">
+  <img src="/images/avatar.jpg">
+  <div id="blog-title">尼玛豹哥</div>
+</div>
+<hr id="header-line">
+
+      <div class="outer">
+        <section id="main"><article id="post-about-zlib-libzip" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      关于windows下编译zlib和libzip
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2021/01/12/about-zlib-libzip/" class="article-date">
+  <time datetime="2021-01-12T00:33:48.000Z" itemprop="datePublished">2021-01-12</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-先安装cmake"><a href="#1-先安装cmake" class="headerlink" title="1. 先安装cmake"></a>1. 先安装cmake</h2><p>一路默认</p>
+<h2 id="2-再编译zlib"><a href="#2-再编译zlib" class="headerlink" title="2. 再编译zlib"></a>2. 再编译zlib</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake .. <span class="literal">-G</span><span class="string">&quot;Visual Studio 16 2019&quot;</span> <span class="literal">-A</span><span class="string">&quot;Win32&quot;</span> <span class="literal">-DCMAKE_PREFIX_PATH</span>=<span class="string">&quot;C:/Users/singl/Codes/zip&quot;</span></span><br></pre></td></tr></table></figure>
+<p>去vs的命令行下编译</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msbuild /P:<span class="keyword">Configuration</span>=<span class="keyword">Release</span> INSTALL.vcxproj</span><br></pre></td></tr></table></figure>
+<h2 id="3-再编译libzip"><a href="#3-再编译libzip" class="headerlink" title="3. 再编译libzip"></a>3. 再编译libzip</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake .. <span class="literal">-G</span><span class="string">&quot;Visual Studio 16 2019&quot;</span> <span class="literal">-A</span><span class="string">&quot;Win32&quot;</span> <span class="literal">-DCMAKE_PREFIX_PATH</span>=<span class="string">&quot;C:/Users/singl/Codes/libzip&quot;</span> <span class="literal">-DZLIB_LIBRARY</span>=<span class="string">&quot;C:/Users/singl/Codes/zlib/lib/zlib.lib&quot;</span> <span class="literal">-DZLIB_INCLUDE_DIR</span>=<span class="string">&quot;C:/Users/singl/Codes/zlib/include&quot;</span></span><br></pre></td></tr></table></figure>
+<p>去vs的命令行下编译</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msbuild /P:<span class="keyword">Configuration</span>=<span class="keyword">Release</span> INSTALL.vcxproj</span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/01/19/about-windows/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          关于windows的一些坑
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/12/24/about-linux/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">记点Linux的东西</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/singlesword" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2021 YangXC 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/hejianxian/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/singlesword" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

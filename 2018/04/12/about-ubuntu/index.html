@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ubuntu相关笔记 | 尼玛豹哥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="挂载硬盘123$ sudo mkfs.ext4  &#x2F;dev&#x2F;sdb$ sudo blkid$ sudo vi &#x2F;etc&#x2F;fstab 修改文件内容： 1UUID&#x3D;a450131d-8c83-4092-a028-887b7f6495b5 &#x2F;mnt&#x2F;xxx ext4 defaults 0 1 12$ sudo mount -a$ sudo chown -R xxx:xxx &#x2F;mnt&#x2F;xxx 18.04配">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntu相关笔记">
+<meta property="og:url" content="http://blog.yangxc.com/2018/04/12/about-ubuntu/index.html">
+<meta property="og:site_name" content="尼玛豹哥">
+<meta property="og:description" content="挂载硬盘123$ sudo mkfs.ext4  &#x2F;dev&#x2F;sdb$ sudo blkid$ sudo vi &#x2F;etc&#x2F;fstab 修改文件内容： 1UUID&#x3D;a450131d-8c83-4092-a028-887b7f6495b5 &#x2F;mnt&#x2F;xxx ext4 defaults 0 1 12$ sudo mount -a$ sudo chown -R xxx:xxx &#x2F;mnt&#x2F;xxx 18.04配">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-04-12T12:48:06.000Z">
+<meta property="article:modified_time" content="2021-04-13T02:59:22.285Z">
+<meta property="article:author" content="YangXC">
+<meta property="article:tag" content="ubuntu">
+<meta property="article:tag" content="挂载">
+<meta property="article:tag" content="硬盘">
+<meta property="article:tag" content="网络配置">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="尼玛豹哥" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="blog-header">
+  <img src="/images/avatar.jpg">
+  <div id="blog-title">尼玛豹哥</div>
+</div>
+<hr id="header-line">
+
+      <div class="outer">
+        <section id="main"><article id="post-about-ubuntu" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ubuntu相关笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2018/04/12/about-ubuntu/" class="article-date">
+  <time datetime="2018-04-12T12:48:06.000Z" itemprop="datePublished">2018-04-12</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="挂载硬盘"><a href="#挂载硬盘" class="headerlink" title="挂载硬盘"></a>挂载硬盘</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo mkfs.ext4  /dev/sdb</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo blkid</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo vi /etc/fstab</span></span><br></pre></td></tr></table></figure>
+<p>修改文件内容：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">UUID</span>=a450131d-<span class="number">8</span>c83-<span class="number">4092</span>-a028-<span class="number">887</span>b7f6495b5 /mnt/xxx ext4 defaults <span class="number">0</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mount -a</span><br><span class="line">$ sudo chown -R xxx:xxx /mnt/xxx</span><br></pre></td></tr></table></figure>
+<h2 id="18-04配置网络"><a href="#18-04配置网络" class="headerlink" title="18.04配置网络"></a>18.04配置网络</h2><p>不再使用 <code>/etc/network/interfaces</code></p>
+<p>修改 <code>/etc/netplan/xxxxx.yaml</code></p>
+<p>改完后 <code>sudo netplay apply</code></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/04/01/centos6-7-oracle/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CentOS 6.7 安装 Oracle 11g2
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/09/17/about-oracle/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">记点Oracle的东西</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/singlesword" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2021 YangXC 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/hejianxian/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/singlesword" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

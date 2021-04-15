@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>尼玛豹哥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="尼玛豹哥">
+<meta property="og:url" content="http://blog.yangxc.com/page/2/index.html">
+<meta property="og:site_name" content="尼玛豹哥">
+<meta property="og:locale">
+<meta property="article:author" content="YangXC">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="尼玛豹哥" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="blog-header">
+  <img src="/images/avatar.jpg">
+  <div id="blog-title">尼玛豹哥</div>
+</div>
+<hr id="header-line">
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-about-linux" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/24/about-linux/">记点Linux的东西</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/12/24/about-linux/" class="article-date">
+  <time datetime="2020-12-24T07:39:11.000Z" itemprop="datePublished">2020-12-24</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="制作deb包"><a href="#制作deb包" class="headerlink" title="制作deb包"></a>制作deb包</h2><p>文件夹结构如下：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">--+--root_path</span><br><span class="line">  <span class="string">|</span></span><br><span class="line">  +--etc/xxx/config</span><br><span class="line">  <span class="string">|</span></span><br><span class="line">  +--opt/xxx/exe</span><br><span class="line">  <span class="string">|</span></span><br><span class="line">  +--var/<span class="built_in">log</span>/xxx</span><br><span class="line">  <span class="string">|</span></span><br><span class="line">  +--+--DEBIAN</span><br><span class="line">     <span class="string">|</span></span><br><span class="line">     +--control</span><br><span class="line">     <span class="string">|</span></span><br><span class="line">     +--postinst</span><br></pre></td></tr></table></figure>
+<p>control文件内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Package: xxxxx</span><br><span class="line">Version: 1.0.0</span><br><span class="line">Section: system</span><br><span class="line">Architecture: amd64</span><br><span class="line">Description: xxxxx</span><br><span class="line">Maintainer: xxxx</span><br></pre></td></tr></table></figure>
+<p>postinst需要+x属性，会在安装后被执行，可以用来改用户，比如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chown root.root /opt/xxx</span><br><span class="line">chown root.root /etc/xxx</span><br><span class="line">chown root.root /var/<span class="built_in">log</span>/xxx</span><br><span class="line">systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+<h2 id="Ubuntu通过systemd制作service"><a href="#Ubuntu通过systemd制作service" class="headerlink" title="Ubuntu通过systemd制作service"></a>Ubuntu通过systemd制作service</h2><p><code>/lib/systemd/system/xxx.service</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=xxx</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=root  <span class="comment"># 使用合适的用户</span></span><br><span class="line">Group=root  <span class="comment"># 使用合适的组</span></span><br><span class="line">ExecStart=/opt/xxx/xxxx</span><br><span class="line">ExecStop=/bin/<span class="built_in">kill</span> <span class="variable">$MAINPID</span></span><br><span class="line">ExecReload=/bin/<span class="built_in">kill</span> -SIGHUP <span class="variable">$MAINPID</span></span><br><span class="line">ExecStop=/bin/<span class="built_in">kill</span> -SIGINT <span class="variable">$MAINPID</span></span><br><span class="line">Restart=always</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target  <span class="comment"># 还不太懂这个</span></span><br></pre></td></tr></table></figure>
+<p>关键是，要reload一下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-about-centos-audio" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/09/about-centos-audio/">CentOS播放声音的折腾</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/12/09/about-centos-audio/" class="article-date">
+  <time datetime="2020-12-09T06:37:34.000Z" itemprop="datePublished">2020-12-09</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>查看是否有声卡</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cat /proc/asound/cards</span><br></pre></td></tr></table></figure>
+<p>下面这个命令也是查声卡的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo aplay -L</span><br></pre></td></tr></table></figure>
+<p>还有这个</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ll /dev/snd/</span><br></pre></td></tr></table></figure>
+<p>修改配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/asound.conf</span><br><span class="line"></span><br><span class="line">defaults.pcm.card 1  </span><br><span class="line">defaults.pcm.device 0  </span><br><span class="line">defaults.ctl.card 1</span><br></pre></td></tr></table></figure>
+<p>调节音量，用方向键移动并调节音量，然后按m键启用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo alsamixer</span><br></pre></td></tr></table></figure>
+<p><img src="/images/alsamixer.png" alt="alsamixer" title="alsamixer"></p>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-about-gitlab" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/07/about-gitlab/">Gitlab的一点记录</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/12/07/about-gitlab/" class="article-date">
+  <time datetime="2020-12-07T01:38:08.000Z" itemprop="datePublished">2020-12-07</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="挪窝"><a href="#挪窝" class="headerlink" title="挪窝"></a>挪窝</h2><p>当时Gitlab是部署着玩儿的，不懂怎么配置也没去研究，结果一用下来里面好多东西，必须得整理一下，首先是挪个窝，否则会一直安装在系统盘，没多久就满了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ sudo mkdir /home/gitlab</span><br><span class="line">$ sudo mkdir /home/gitlab/git-data</span><br><span class="line">$ sudo chown git.root /home/gitlab/git-data</span><br><span class="line">$ sudo su - git</span><br><span class="line">$ vi /etc/gitlab/gitlab.rb</span><br><span class="line">git_data_dirs(&#123;</span><br><span class="line">  <span class="string">&quot;default&quot;</span> =&gt; &#123;</span><br><span class="line">    <span class="string">&quot;path&quot;</span> =&gt; <span class="string">&quot;/home/gitlab/git-data&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="string">&quot;alternative&quot;</span> =&gt; &#123;</span><br><span class="line">    <span class="string">&quot;path&quot;</span> =&gt; <span class="string">&quot; /home/gitlab2/gitlab-data&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">$ gitlab-ctl stop</span><br><span class="line">$ rsync -av /var/opt/gitlab/git-data/repositories /home/data/gitlab/git-data</span><br><span class="line">$ gitlab-ctl reconfigure </span><br><span class="line">$ gitlab-ctl start</span><br></pre></td></tr></table></figure>
+<h2 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-rake gitlab:backup:create</span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-about-postgresql" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/06/about-postgresql/">关于PostgreSQL</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/12/06/about-postgresql/" class="article-date">
+  <time datetime="2020-12-06T02:15:18.000Z" itemprop="datePublished">2020-12-06</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="CentOS安装配置PostgreSQL"><a href="#CentOS安装配置PostgreSQL" class="headerlink" title="CentOS安装配置PostgreSQL"></a>CentOS安装配置PostgreSQL</h1><h2 id="1-下载离线包并安装"><a href="#1-下载离线包并安装" class="headerlink" title="1. 下载离线包并安装"></a>1. 下载离线包并安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">https://download.postgresql.org/pub/repos/yum/13/redhat/rhel-8.2-x86_64/</span><br><span class="line"></span><br><span class="line">postgresql13-13.1-1PGDG.rhel8.x86_64.rpm</span><br><span class="line">postgresql13-contrib-13.1-1PGDG.rhel8.x86_64.rpm</span><br><span class="line">postgresql13-devel-13.1-1PGDG.rhel8.x86_64.rpm</span><br><span class="line">postgresql13-libs-13.1-1PGDG.rhel8.x86_64.rpm</span><br><span class="line">postgresql13-server-13.1-1PGDG.rhel8.x86_64.rpm</span><br></pre></td></tr></table></figure>
+<p>依次安装。</p>
+<h2 id="2-配置"><a href="#2-配置" class="headerlink" title="2. 配置"></a>2. 配置</h2><h3 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo /usr/pgsql-13/bin/postgresql-13-setup initdb</span><br></pre></td></tr></table></figure>
+<p>主要配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ls  /var/lib/pgsql/13/data/</span><br></pre></td></tr></table></figure>
+<h3 id="配置数据库"><a href="#配置数据库" class="headerlink" title="配置数据库"></a>配置数据库</h3><p>修改默认账号密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo su - postgres </span><br><span class="line">$ psql -c <span class="string">&quot;alter user postgres with password &#x27;newpassword&#x27;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>启用远程连接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vi /var/lib/pgsql/13/data/postgresql.conf</span><br><span class="line">listen_addresses = <span class="string">&#x27;*&#x27;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vi /var/lib/pgsql/13/data/pg_hba.conf</span><br><span class="line">host all all 0.0.0.0/0 md5</span><br></pre></td></tr></table></figure>
+<h3 id="设置自动启动"><a href="#设置自动启动" class="headerlink" title="设置自动启动"></a>设置自动启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl <span class="built_in">enable</span> --now postgresql-13</span><br></pre></td></tr></table></figure>
+<p>重启服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl restart postgresql-13</span><br></pre></td></tr></table></figure>
+<h2 id="3-连接"><a href="#3-连接" class="headerlink" title="3. 连接"></a>3. 连接</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ psql -U &lt;dbuser&gt; -h &lt;serverip&gt; -p 5432 &lt;dbname&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="4-数据库操作"><a href="#4-数据库操作" class="headerlink" title="4. 数据库操作"></a>4. 数据库操作</h2><p>创建数据库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database xxx;</span><br></pre></td></tr></table></figure>
+<p>查看数据库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\l</span><br></pre></td></tr></table></figure>
+<p>查看表</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\d</span><br></pre></td></tr></table></figure>
+<p>查看表结构</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\d table;</span><br></pre></td></tr></table></figure>
+<p>切换数据库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\c db</span><br></pre></td></tr></table></figure>
+<p>修改所有者</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter database xxx owner to xxx;</span><br></pre></td></tr></table></figure>
+<h3 id="5、用户操作"><a href="#5、用户操作" class="headerlink" title="5、用户操作"></a>5、用户操作</h3><p>创建用户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create user xxx;</span><br></pre></td></tr></table></figure>
+<p>赋权</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grant all privileges on database xxx to xxx;</span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-CentOS-firewall" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/06/CentOS-firewall/">CentOS下firewall操作指令</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/12/06/CentOS-firewall/" class="article-date">
+  <time datetime="2020-12-06T02:13:23.000Z" itemprop="datePublished">2020-12-06</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo firewall-cmd --query-port=8080/tcp <span class="comment"># 查询端口是否开放</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --add-port=80/tcp --permanent <span class="comment">#永久添加80端口例外(全局)</span></span><br><span class="line">sudo firewall-cmd --remove-port=80/tcp --permanent <span class="comment">#永久删除80端口例外(全局)</span></span><br><span class="line">sudo firewall-cmd --add-port=65001-65010/tcp --permanent <span class="comment">#永久增加65001-65010例外(全局)</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --zone=public --add-port=80/tcp --permanent <span class="comment">#永久添加80端口例外(区域public)</span></span><br><span class="line">sudo firewall-cmd --zone=public --remove-port=80/tcp --permanent <span class="comment">#永久删除80端口例外(区域public)</span></span><br><span class="line">sudo firewall-cmd --zone=public --add-port=65001-65010/tcp --permanent <span class="comment">#永久增加65001-65010例外(区域public)</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --reload <span class="comment">#重启防火墙(修改配置后要重启防火墙)</span></span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&lt; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &gt;</a>
+    </nav>
+  
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/singlesword" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2021 YangXC 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/hejianxian/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/singlesword" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>记点关于vim的东西 | 尼玛豹哥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="普通操作 cc 删除当前行，光标不动，进入插入模式 h j k l 左 下 上 右 w 下个单词头 e 本单词尾 b 本单词头 u undo ^r redo { 下段首 } 本段首 _ 行首 $ 行尾 gg 顶部 o 新建一行 C 删除光标后面的，并进入插入模式 v 可视选择 V 行可视选择 gh 选择模式，可以直接被覆盖文件操作 :e filename :ls 列出当前打开的文件 :b1 :b2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记点关于vim的东西">
+<meta property="og:url" content="http://blog.yangxc.com/2021/01/23/about-vim/index.html">
+<meta property="og:site_name" content="尼玛豹哥">
+<meta property="og:description" content="普通操作 cc 删除当前行，光标不动，进入插入模式 h j k l 左 下 上 右 w 下个单词头 e 本单词尾 b 本单词头 u undo ^r redo { 下段首 } 本段首 _ 行首 $ 行尾 gg 顶部 o 新建一行 C 删除光标后面的，并进入插入模式 v 可视选择 V 行可视选择 gh 选择模式，可以直接被覆盖文件操作 :e filename :ls 列出当前打开的文件 :b1 :b2">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-01-23T12:51:53.000Z">
+<meta property="article:modified_time" content="2021-04-13T02:59:22.285Z">
+<meta property="article:author" content="YangXC">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="尼玛豹哥" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="blog-header">
+  <img src="/images/avatar.jpg">
+  <div id="blog-title">尼玛豹哥</div>
+</div>
+<hr id="header-line">
+
+      <div class="outer">
+        <section id="main"><article id="post-about-vim" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      记点关于vim的东西
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2021/01/23/about-vim/" class="article-date">
+  <time datetime="2021-01-23T12:51:53.000Z" itemprop="datePublished">2021-01-23</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="普通操作"><a href="#普通操作" class="headerlink" title="普通操作"></a>普通操作</h2><ul>
+<li>cc 删除当前行，光标不动，进入插入模式</li>
+<li>h j k l 左 下 上 右</li>
+<li>w 下个单词头</li>
+<li>e 本单词尾</li>
+<li>b 本单词头</li>
+<li>u undo</li>
+<li>^r redo</li>
+<li>{ 下段首</li>
+<li>} 本段首</li>
+<li>_ 行首</li>
+<li>$ 行尾</li>
+<li>gg 顶部</li>
+<li>o 新建一行</li>
+<li>C 删除光标后面的，并进入插入模式</li>
+<li>v 可视选择</li>
+<li>V 行可视选择</li>
+<li>gh 选择模式，可以直接被覆盖<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2></li>
+<li>:e filename</li>
+<li>:ls 列出当前打开的文件</li>
+<li>:b1 :b2  切换到第几个文件</li>
+<li>:b name 模糊匹配，切换文件</li>
+<li>:b name tab循环</li>
+<li>:Ex 浏览文件夹</li>
+<li>在:Ex下 D 删除</li>
+<li>在:Ex下 R 重命名</li>
+<li>在:Ex下 - 上级目录<h2 id="窗口操作"><a href="#窗口操作" class="headerlink" title="窗口操作"></a>窗口操作</h2></li>
+<li>:sp [filename]</li>
+<li>:vs [filename]</li>
+<li>^w,q 关闭当前窗口</li>
+<li>^wh ^wj ^wk ^wl 跳转窗口</li>
+<li>^w,H ^w,J ^w,K ^w,L 移动窗口</li>
+<li>:newtab 新建标签页</li>
+<li>:gt :gT 切换标签页</li>
+<li>:tabmove N 移到位置N<h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2></li>
+<li>set hlsearch 高亮所有关键字</li>
+<li>:noh 清除高亮</li>
+<li>s/<find-this>/<replace-with-this>/<flags> g 全局，c 确认， i 忽略大小写，I 区分大小写，e 没有匹配时不显示错误</li>
+<li>/&lt;word&gt; 整词匹配<h2 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h2></li>
+<li>y[x] 复制</li>
+<li>yw 复制一个词</li>
+<li>ye 复制到行尾</li>
+<li>p 粘贴</li>
+<li>“* 系统粘贴板</li>
+</ul>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/03/01/about-mac-networks/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MAC多个网络配置
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/01/19/about-windows/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">关于windows的一些坑</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/singlesword" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2021 YangXC 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/hejianxian/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/singlesword" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

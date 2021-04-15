@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在mac上使用openldap | 尼玛豹哥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="几个目录： 12&#x2F;etc&#x2F;openldapvar&#x2F;db&#x2F;openldap&#x2F;openldap-data 修改&#x2F;etc&#x2F;openldap&#x2F;ldap.conf： 12BASE dc&#x3D;yangxc,dc&#x3D;comURI ldap:&#x2F;&#x2F;127.0.0.1:389 生成密码： 12slappasswd -s 123456&amp;#123;SSHA&amp;#125;rpF1AqHFkpP9KdDjclUmFhsy951st6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在mac上使用openldap">
+<meta property="og:url" content="http://blog.yangxc.com/2020/04/04/openldap-on-mac/index.html">
+<meta property="og:site_name" content="尼玛豹哥">
+<meta property="og:description" content="几个目录： 12&#x2F;etc&#x2F;openldapvar&#x2F;db&#x2F;openldap&#x2F;openldap-data 修改&#x2F;etc&#x2F;openldap&#x2F;ldap.conf： 12BASE dc&#x3D;yangxc,dc&#x3D;comURI ldap:&#x2F;&#x2F;127.0.0.1:389 生成密码： 12slappasswd -s 123456&amp;#123;SSHA&amp;#125;rpF1AqHFkpP9KdDjclUmFhsy951st6">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-04-04T05:42:55.000Z">
+<meta property="article:modified_time" content="2021-04-13T02:59:22.290Z">
+<meta property="article:author" content="YangXC">
+<meta property="article:tag" content="mac">
+<meta property="article:tag" content="ldap">
+<meta property="article:tag" content="openldap">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="尼玛豹哥" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="blog-header">
+  <img src="/images/avatar.jpg">
+  <div id="blog-title">尼玛豹哥</div>
+</div>
+<hr id="header-line">
+
+      <div class="outer">
+        <section id="main"><article id="post-openldap-on-mac" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在mac上使用openldap
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/04/04/openldap-on-mac/" class="article-date">
+  <time datetime="2020-04-04T05:42:55.000Z" itemprop="datePublished">2020-04-04</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>几个目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/etc/openldap</span><br><span class="line">var/db/openldap/openldap-data</span><br></pre></td></tr></table></figure>
+<p>修改<code>/etc/openldap/ldap.conf</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BASE dc=yangxc,dc=com</span><br><span class="line">URI ldap://127.0.0.1:389</span><br></pre></td></tr></table></figure>
+<p>生成密码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slappasswd -s 123456</span><br><span class="line">&#123;SSHA&#125;rpF1AqHFkpP9KdDjclUmFhsy951st6kb</span><br></pre></td></tr></table></figure>
+<p>修改<code>/etc/openldap/sldap.conf</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">include         /private/etc/openldap/schema/core.schema</span><br><span class="line">include         /private/etc/openldap/schema/cosine.schema</span><br><span class="line">include         /private/etc/openldap/schema/nis.schema</span><br><span class="line">include         /private/etc/openldap/schema/inetorgperson.schema</span><br><span class="line"></span><br><span class="line">modulepath /usr/libexec/openldap</span><br><span class="line">moduleload back_bdb.la</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">suffix          <span class="string">&quot;dc=yangxc,dc=com&quot;</span></span><br><span class="line">rootdn          <span class="string">&quot;cn=admin,dc=yangxc,dc=com&quot;</span></span><br><span class="line">rootpw          &#123;SSHA&#125;rpF1AqHFkpP9KdDjclUmFhsy951st6kb</span><br></pre></td></tr></table></figure>
+<p>启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/libexec/slapd -d3</span><br></pre></td></tr></table></figure>
+<p>新建第一个ou，domain.ldif：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dn: dc=yangxc,dc=com</span><br><span class="line">objectClass: top</span><br><span class="line">objectClass: domain</span><br><span class="line">dc: yangxc</span><br></pre></td></tr></table></figure>
+<p>执行ldapadd添加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldapadd -D <span class="string">&quot;cn=admin,dc=yangxc,dc=com&quot;</span> -W -x -f domain.ldif</span><br></pre></td></tr></table></figure>
+<p>再建些个子ou，unit.ldif：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">dn: ou=Manage,dc=yangxc,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: Manage</span><br><span class="line"></span><br><span class="line">dn: ou=Dev,dc=yangxc,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: Dev</span><br><span class="line"></span><br><span class="line">dn: ou=Tech,dc=yangxc,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: Tech</span><br><span class="line"></span><br><span class="line">dn: ou=General,dc=yangxc,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: General</span><br></pre></td></tr></table></figure>
+<p>执行ldapadd添加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldapadd -D <span class="string">&quot;cn=admin,dc=yangxc,dc=com&quot;</span> -W -x -f unit.ldif</span><br></pre></td></tr></table></figure>
+<p>下面添加用户，user.ldif：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">dn: uid=test1,ou=Dev,dc=yangxc,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">objectClass: posixAccount</span><br><span class="line">objectClass: shadowAccount</span><br><span class="line">homeDirectory: /home/test1</span><br><span class="line">userPassword: 123456</span><br><span class="line">loginShell: /bin/bash</span><br><span class="line">cn: test1</span><br><span class="line">uidNumber: 1001</span><br><span class="line">gidNumber: 1010</span><br><span class="line">sn: Test1</span><br><span class="line">mail: @yangxc.com</span><br><span class="line">postalAddress: beijing</span><br><span class="line">mobile: 13888888888</span><br><span class="line"></span><br><span class="line">dn: uid=test2,ou=Manage,dc=yangxc,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">objectClass: posixAccount</span><br><span class="line">objectClass: shadowAccount</span><br><span class="line">homeDirectory: /home/test2</span><br><span class="line">userPassword: 123456</span><br><span class="line">loginShell: /bin/bash</span><br><span class="line">cn: test2</span><br><span class="line">uidNumber: 1002</span><br><span class="line">gidNumber: 1011</span><br><span class="line">sn: Test2</span><br><span class="line">mail: @yangxc.com</span><br><span class="line">postalAddress: beijing</span><br><span class="line">mobile: 13999999999</span><br></pre></td></tr></table></figure>
+<p>执行ldapadd添加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldapadd -D <span class="string">&quot;cn=admin,dc=yangxc,dc=com&quot;</span> -W -x -f user.ldif</span><br></pre></td></tr></table></figure>
+<p>几个命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ldapsearch -x -LLL</span><br><span class="line">ldapsearch -x -b <span class="string">&quot;ou=Manage,dc=yangxc,dc=com&quot;</span></span><br><span class="line">ldapadd -D <span class="string">&quot;cn=admin,dc=yangxc,dc=com&quot;</span> -W -x -f something.ldif</span><br><span class="line">ldapmodify -D <span class="string">&quot;cn=admin,dc=yangxc,dc=com&quot;</span> -W -x -f modify.ldif</span><br><span class="line">ldapdelete -D <span class="string">&quot;cn=admin,dc=yangxc,dc=com&quot;</span> -W -x <span class="string">&quot;ou=General,dc=yangxc,dc=com&quot;</span></span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/05/04/about-mysql/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          记点mysql的东西
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/04/02/about-node/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">nodejs使用笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/singlesword" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2021 YangXC 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/hejianxian/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/singlesword" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

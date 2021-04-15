@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>尼玛豹哥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="尼玛豹哥">
+<meta property="og:url" content="http://blog.yangxc.com/index.html">
+<meta property="og:site_name" content="尼玛豹哥">
+<meta property="og:locale">
+<meta property="article:author" content="YangXC">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="尼玛豹哥" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="blog-header">
+  <img src="/images/avatar.jpg">
+  <div id="blog-title">尼玛豹哥</div>
+</div>
+<hr id="header-line">
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-about-joomla" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/15/about-joomla/">关于Joomla的应用与部署</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2021/04/15/about-joomla/" class="article-date">
+  <time datetime="2021-04-15T06:05:45.000Z" itemprop="datePublished">2021-04-15</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Ubuntu-20-04-和-php-的相关准备"><a href="#Ubuntu-20-04-和-php-的相关准备" class="headerlink" title="Ubuntu 20.04 和 php 的相关准备"></a>Ubuntu 20.04 和 php 的相关准备</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install php-pgsql</span><br><span class="line">sudo apt install php-mysql</span><br></pre></td></tr></table></figure>
+<h2 id="处理-www-data-的权限"><a href="#处理-www-data-的权限" class="headerlink" title="处理 www-data 的权限"></a>处理 www-data 的权限</h2><p>建立<code>www</code>文件夹，比如<code>/home/xxx/www</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R xxx.www-data /home/xxx/www</span><br><span class="line"><span class="built_in">cd</span> /home/xxx/www</span><br><span class="line">find . -<span class="built_in">type</span> d -<span class="built_in">exec</span> chmod 2775 &#123;&#125; \;</span><br><span class="line">find . -<span class="built_in">type</span> f -<span class="built_in">exec</span> chmod 0664 &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+<h2 id="修改-apache-配置，加主文件夹操作权限"><a href="#修改-apache-配置，加主文件夹操作权限" class="headerlink" title="修改 apache 配置，加主文件夹操作权限"></a>修改 apache 配置，加主文件夹操作权限</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Directory</span> &quot;/<span class="attr">home</span>/<span class="attr">yangxc</span>/<span class="attr">www</span>/<span class="attr">crca</span>&quot;&gt;</span></span><br><span class="line">    AllowOverride All</span><br><span class="line">    Order allow,deny</span><br><span class="line">    Allow from all</span><br><span class="line">    Require all granted</span><br><span class="line"><span class="tag">&lt;/<span class="name">Directory</span>&gt;</span></span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-about-mac-networks" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/03/01/about-mac-networks/">MAC多个网络配置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2021/03/01/about-mac-networks/" class="article-date">
+  <time datetime="2021-03-01T06:26:17.000Z" itemprop="datePublished">2021-03-01</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>MAC总共连了三个网络：</p>
+<ul>
+<li>USB+iPhone热点共享；</li>
+<li>Wifi接测试环境网络；</li>
+<li>网线接开发环境网络。</li>
+</ul>
+<p>首先把三个网络都接上，在网络管理里调整顺序，把iPhone USB放到第一个。<br>然后删除默认网关：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo route -n delete 0.0.0.0</span><br></pre></td></tr></table></figure>
+<p>设置默认网关：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo route -n add 0.0.0.0 172.20.10.1</span><br></pre></td></tr></table></figure>
+<p>然后拔掉iPhone，再设置下一个路径：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo route -n add 172.16.13.0/16 172.16.8.1</span><br></pre></td></tr></table></figure>
+<p>再断开这个网络，设置下一个路由：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo route -n add 192.168.0.0/24 192.168.0.1</span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-about-vim" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/23/about-vim/">记点关于vim的东西</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2021/01/23/about-vim/" class="article-date">
+  <time datetime="2021-01-23T12:51:53.000Z" itemprop="datePublished">2021-01-23</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="普通操作"><a href="#普通操作" class="headerlink" title="普通操作"></a>普通操作</h2><ul>
+<li>cc 删除当前行，光标不动，进入插入模式</li>
+<li>h j k l 左 下 上 右</li>
+<li>w 下个单词头</li>
+<li>e 本单词尾</li>
+<li>b 本单词头</li>
+<li>u undo</li>
+<li>^r redo</li>
+<li>{ 下段首</li>
+<li>} 本段首</li>
+<li>_ 行首</li>
+<li>$ 行尾</li>
+<li>gg 顶部</li>
+<li>o 新建一行</li>
+<li>C 删除光标后面的，并进入插入模式</li>
+<li>v 可视选择</li>
+<li>V 行可视选择</li>
+<li>gh 选择模式，可以直接被覆盖<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2></li>
+<li>:e filename</li>
+<li>:ls 列出当前打开的文件</li>
+<li>:b1 :b2  切换到第几个文件</li>
+<li>:b name 模糊匹配，切换文件</li>
+<li>:b name tab循环</li>
+<li>:Ex 浏览文件夹</li>
+<li>在:Ex下 D 删除</li>
+<li>在:Ex下 R 重命名</li>
+<li>在:Ex下 - 上级目录<h2 id="窗口操作"><a href="#窗口操作" class="headerlink" title="窗口操作"></a>窗口操作</h2></li>
+<li>:sp [filename]</li>
+<li>:vs [filename]</li>
+<li>^w,q 关闭当前窗口</li>
+<li>^wh ^wj ^wk ^wl 跳转窗口</li>
+<li>^w,H ^w,J ^w,K ^w,L 移动窗口</li>
+<li>:newtab 新建标签页</li>
+<li>:gt :gT 切换标签页</li>
+<li>:tabmove N 移到位置N<h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2></li>
+<li>set hlsearch 高亮所有关键字</li>
+<li>:noh 清除高亮</li>
+<li>s/<find-this>/<replace-with-this>/<flags> g 全局，c 确认， i 忽略大小写，I 区分大小写，e 没有匹配时不显示错误</li>
+<li>/&lt;word&gt; 整词匹配<h2 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h2></li>
+<li>y[x] 复制</li>
+<li>yw 复制一个词</li>
+<li>ye 复制到行尾</li>
+<li>p 粘贴</li>
+<li>“* 系统粘贴板</li>
+</ul>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-about-windows" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/19/about-windows/">关于windows的一些坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2021/01/19/about-windows/" class="article-date">
+  <time datetime="2021-01-19T06:09:25.000Z" itemprop="datePublished">2021-01-19</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="powershell执行脚本的权限"><a href="#powershell执行脚本的权限" class="headerlink" title="powershell执行脚本的权限"></a>powershell执行脚本的权限</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set-ExecutionPolicy</span> <span class="literal">-ExecutionPolicy</span> RemoteSigned <span class="literal">-Scope</span> CurrentUser</span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-about-zlib-libzip" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/12/about-zlib-libzip/">关于windows下编译zlib和libzip</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2021/01/12/about-zlib-libzip/" class="article-date">
+  <time datetime="2021-01-12T00:33:48.000Z" itemprop="datePublished">2021-01-12</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-先安装cmake"><a href="#1-先安装cmake" class="headerlink" title="1. 先安装cmake"></a>1. 先安装cmake</h2><p>一路默认</p>
+<h2 id="2-再编译zlib"><a href="#2-再编译zlib" class="headerlink" title="2. 再编译zlib"></a>2. 再编译zlib</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake .. <span class="literal">-G</span><span class="string">&quot;Visual Studio 16 2019&quot;</span> <span class="literal">-A</span><span class="string">&quot;Win32&quot;</span> <span class="literal">-DCMAKE_PREFIX_PATH</span>=<span class="string">&quot;C:/Users/singl/Codes/zip&quot;</span></span><br></pre></td></tr></table></figure>
+<p>去vs的命令行下编译</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msbuild /P:<span class="keyword">Configuration</span>=<span class="keyword">Release</span> INSTALL.vcxproj</span><br></pre></td></tr></table></figure>
+<h2 id="3-再编译libzip"><a href="#3-再编译libzip" class="headerlink" title="3. 再编译libzip"></a>3. 再编译libzip</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake .. <span class="literal">-G</span><span class="string">&quot;Visual Studio 16 2019&quot;</span> <span class="literal">-A</span><span class="string">&quot;Win32&quot;</span> <span class="literal">-DCMAKE_PREFIX_PATH</span>=<span class="string">&quot;C:/Users/singl/Codes/libzip&quot;</span> <span class="literal">-DZLIB_LIBRARY</span>=<span class="string">&quot;C:/Users/singl/Codes/zlib/lib/zlib.lib&quot;</span> <span class="literal">-DZLIB_INCLUDE_DIR</span>=<span class="string">&quot;C:/Users/singl/Codes/zlib/include&quot;</span></span><br></pre></td></tr></table></figure>
+<p>去vs的命令行下编译</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msbuild /P:<span class="keyword">Configuration</span>=<span class="keyword">Release</span> INSTALL.vcxproj</span><br></pre></td></tr></table></figure>
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &gt;</a>
+    </nav>
+  
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/singlesword" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2021 YangXC 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/hejianxian/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/singlesword" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

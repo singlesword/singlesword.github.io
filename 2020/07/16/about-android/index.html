@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>关于安卓的一些记录 | 尼玛豹哥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="关于签名文件1. 创建签名文件1keytool -genkey -alias &lt;alias&gt; -keyalg RSA -validity &lt;20000&gt; -keystore &lt;xxx.keystore&gt;  alias: 别名 keyalg: 算法 validity: 有效天数 keystore: 文件名2. 修改密码12keytool -storepasswd">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于安卓的一些记录">
+<meta property="og:url" content="http://blog.yangxc.com/2020/07/16/about-android/index.html">
+<meta property="og:site_name" content="尼玛豹哥">
+<meta property="og:description" content="关于签名文件1. 创建签名文件1keytool -genkey -alias &lt;alias&gt; -keyalg RSA -validity &lt;20000&gt; -keystore &lt;xxx.keystore&gt;  alias: 别名 keyalg: 算法 validity: 有效天数 keystore: 文件名2. 修改密码12keytool -storepasswd">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-07-16T02:42:17.000Z">
+<meta property="article:modified_time" content="2021-04-13T02:59:22.281Z">
+<meta property="article:author" content="YangXC">
+<meta property="article:tag" content="安卓">
+<meta property="article:tag" content="签名">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Sign">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="尼玛豹哥" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="blog-header">
+  <img src="/images/avatar.jpg">
+  <div id="blog-title">尼玛豹哥</div>
+</div>
+<hr id="header-line">
+
+      <div class="outer">
+        <section id="main"><article id="post-about-android" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      关于安卓的一些记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2020/07/16/about-android/" class="article-date">
+  <time datetime="2020-07-16T02:42:17.000Z" itemprop="datePublished">2020-07-16</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="关于签名文件"><a href="#关于签名文件" class="headerlink" title="关于签名文件"></a>关于签名文件</h2><h3 id="1-创建签名文件"><a href="#1-创建签名文件" class="headerlink" title="1. 创建签名文件"></a>1. 创建签名文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -genkey -<span class="built_in">alias</span> &lt;<span class="built_in">alias</span>&gt; -keyalg RSA -validity &lt;20000&gt; -keystore &lt;xxx.keystore&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>alias: 别名</li>
+<li>keyalg: 算法</li>
+<li>validity: 有效天数</li>
+<li>keystore: 文件名<h3 id="2-修改密码"><a href="#2-修改密码" class="headerlink" title="2. 修改密码"></a>2. 修改密码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">keytool -storepasswd -keystore &lt;xxx.keystore&gt;</span><br><span class="line">keytool -keypasswd -<span class="built_in">alias</span> &lt;<span class="built_in">alias</span>&gt; -keystore &lt;xxx.keystore&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="3-查看签名信息-MD5"><a href="#3-查看签名信息-MD5" class="headerlink" title="3. 查看签名信息/MD5"></a>3. 查看签名信息/MD5</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">keytool -list -v -keystore &lt;xxx.keystore&gt;</span><br><span class="line">keytool -list -v -keystore &lt;xxx.keystore&gt; -storepass &lt;password&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/12/06/CentOS-firewall/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CentOS下firewall操作指令
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/05/04/about-mysql/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">记点mysql的东西</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/singlesword" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2021 YangXC 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/hejianxian/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/singlesword" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

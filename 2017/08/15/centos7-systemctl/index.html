@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>CentOS 7 利用 systemctl 安装自动启服务 | 尼玛豹哥</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在 &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system 文件夹下建立文件 shadowsocks.service，文件内容如下： 1234567891011121314[Unit]Description&#x3D;Shadowsocks ServerAfter&#x3D;network.target remote-fs.target nss-lookup.target[Service]Type&#x3D;forkingPIDFil">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS 7 利用 systemctl 安装自动启服务">
+<meta property="og:url" content="http://blog.yangxc.com/2017/08/15/centos7-systemctl/index.html">
+<meta property="og:site_name" content="尼玛豹哥">
+<meta property="og:description" content="在 &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system 文件夹下建立文件 shadowsocks.service，文件内容如下： 1234567891011121314[Unit]Description&#x3D;Shadowsocks ServerAfter&#x3D;network.target remote-fs.target nss-lookup.target[Service]Type&#x3D;forkingPIDFil">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-08-15T12:45:41.000Z">
+<meta property="article:modified_time" content="2021-04-13T02:59:22.287Z">
+<meta property="article:author" content="YangXC">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="systemctl">
+<meta property="article:tag" content="自启动">
+<meta property="article:tag" content="服务">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="尼玛豹哥" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div id="blog-header">
+  <img src="/images/avatar.jpg">
+  <div id="blog-title">尼玛豹哥</div>
+</div>
+<hr id="header-line">
+
+      <div class="outer">
+        <section id="main"><article id="post-centos7-systemctl" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CentOS 7 利用 systemctl 安装自动启服务
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/08/15/centos7-systemctl/" class="article-date">
+  <time datetime="2017-08-15T12:45:41.000Z" itemprop="datePublished">2017-08-15</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在 <code>/usr/lib/systemd/system</code> 文件夹下建立文件 <code>shadowsocks.service</code>，文件内容如下：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=Shadowsocks Server</span><br><span class="line"><span class="attr">After</span>=network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=forking</span><br><span class="line"><span class="attr">PIDFile</span>=/var/shadowsocks/pid</span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/ssserver -c /var/shadowsocks/conf.json -d start</span><br><span class="line"><span class="attr">ExecReload</span>=/usr/bin/ssserver -c /var/shadowsocks/conf.json -d restart</span><br><span class="line"><span class="attr">ExecStop</span>=/usr/bin/ssserver -d stop</span><br><span class="line"><span class="attr">PrivateTmp</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>给文件加上754权限：<code>chmod +754 shadowsocks.service</code>。</p>
+<ul>
+<li>用 <code>systemctl start shadowsocks.service</code> 就可以启动服务。</li>
+<li>用 <code>systemctl enable shadowsocks.service</code> 就可以启用自动启服务。</li>
+</ul>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/09/17/about-oracle/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          记点Oracle的东西
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/08/03/about-hbase/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">hbase使用笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+  		
+  		
+  			<li><a href="https://github.com/singlesword" target="_blank"><i class="icon icon-github"></i></a></li>
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2021 YangXC 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/hejianxian/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/singlesword" class="mobile-nav-link">Github</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
