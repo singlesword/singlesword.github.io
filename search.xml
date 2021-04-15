@@ -233,7 +233,7 @@
     <entry>
       <title>Git使用笔记</title>
       <link href="/2020/04/02/about-git/"/>
-      <content type="html"><![CDATA[<p>命令行下不显示中文的问题：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> LESSCHARSET=utf-8</span><br><span class="line">git config --global core.quotepath <span class="literal">false</span></span><br></pre></td></tr></table></figure><p>记住密码</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global credential.helper store</span><br></pre></td></tr></table></figure>]]></content>
+      <content type="html"><![CDATA[<p>命令行下不显示中文的问题：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> LESSCHARSET=utf-8</span><br><span class="line">git config --global core.quotepath <span class="literal">false</span></span><br></pre></td></tr></table></figure><p>记住密码</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global credential.helper store</span><br></pre></td></tr></table></figure><p>修改回车符处理</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global core.autocrlf <span class="literal">false</span></span><br></pre></td></tr></table></figure>]]></content>
       
       
         <tags>
