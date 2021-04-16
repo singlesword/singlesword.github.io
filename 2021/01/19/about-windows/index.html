@@ -5,16 +5,19 @@
   
   <title>关于windows的一些坑 | 尼玛豹哥</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="powershell执行脚本的权限1Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser">
+  <meta name="description" content="powershell执行脚本的权限1Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser 删除本地office的key12cd &#39;C:\Program Files\Microsoft Office\Office16&#39;cscript ospp.vbs &#x2F;dstatus 寻找key: Last">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于windows的一些坑">
 <meta property="og:url" content="http://blog.yangxc.com/2021/01/19/about-windows/index.html">
 <meta property="og:site_name" content="尼玛豹哥">
-<meta property="og:description" content="powershell执行脚本的权限1Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser">
+<meta property="og:description" content="powershell执行脚本的权限1Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser 删除本地office的key12cd &#39;C:\Program Files\Microsoft Office\Office16&#39;cscript ospp.vbs &#x2F;dstatus 寻找key: Last">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-01-19T06:09:25.000Z">
-<meta property="article:modified_time" content="2021-04-13T02:59:22.286Z">
+<meta property="article:modified_time" content="2021-04-16T01:26:54.137Z">
 <meta property="article:author" content="YangXC">
+<meta property="article:tag" content="windows">
+<meta property="article:tag" content="office">
+<meta property="article:tag" content="powershell">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="尼玛豹哥" type="application/atom+xml">
@@ -62,6 +65,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="powershell执行脚本的权限"><a href="#powershell执行脚本的权限" class="headerlink" title="powershell执行脚本的权限"></a>powershell执行脚本的权限</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set-ExecutionPolicy</span> <span class="literal">-ExecutionPolicy</span> RemoteSigned <span class="literal">-Scope</span> CurrentUser</span><br></pre></td></tr></table></figure>
+<h2 id="删除本地office的key"><a href="#删除本地office的key" class="headerlink" title="删除本地office的key"></a>删除本地office的key</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#39;C:\Program Files\Microsoft Office\Office16&#39;</span><br><span class="line">cscript ospp.vbs &#x2F;dstatus</span><br></pre></td></tr></table></figure>
+<p>寻找key: <code>Last 5 characters of installed product key:XXXXX</code></p>
+<p>删除key: <code>cscript ospp.vbs /unpkey:XXXXX</code></p>
+
       
 
       

@@ -226,6 +226,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="powershell执行脚本的权限"><a href="#powershell执行脚本的权限" class="headerlink" title="powershell执行脚本的权限"></a>powershell执行脚本的权限</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set-ExecutionPolicy</span> <span class="literal">-ExecutionPolicy</span> RemoteSigned <span class="literal">-Scope</span> CurrentUser</span><br></pre></td></tr></table></figure>
+<h2 id="删除本地office的key"><a href="#删除本地office的key" class="headerlink" title="删除本地office的key"></a>删除本地office的key</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#39;C:\Program Files\Microsoft Office\Office16&#39;</span><br><span class="line">cscript ospp.vbs &#x2F;dstatus</span><br></pre></td></tr></table></figure>
+<p>寻找key: <code>Last 5 characters of installed product key:XXXXX</code></p>
+<p>删除key: <code>cscript ospp.vbs /unpkey:XXXXX</code></p>
+
       
 
       
