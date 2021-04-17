@@ -37,6 +37,49 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-about-centos" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/04/17/about-centos/">关于CentOS的操作和坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2021/04/17/about-centos/" class="article-date">
+  <time datetime="2021-04-17T10:59:39.000Z" itemprop="datePublished">2021-04-17</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CentOS7以上的firewalld"><a href="#CentOS7以上的firewalld" class="headerlink" title="CentOS7以上的firewalld"></a>CentOS7以上的firewalld</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo firewall-cmd --query-port=8080/tcp <span class="comment"># 查询端口是否开放</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --add-port=80/tcp --permanent <span class="comment">#永久添加80端口例外(全局)</span></span><br><span class="line">sudo firewall-cmd --remove-port=80/tcp --permanent <span class="comment">#永久删除80端口例外(全局)</span></span><br><span class="line">sudo firewall-cmd --add-port=65001-65010/tcp --permanent <span class="comment">#永久增加65001-65010例外(全局)</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --zone=public --add-port=80/tcp --permanent <span class="comment">#永久添加80端口例外(区域public)</span></span><br><span class="line">sudo firewall-cmd --zone=public --remove-port=80/tcp --permanent <span class="comment">#永久删除80端口例外(区域public)</span></span><br><span class="line">sudo firewall-cmd --zone=public --add-port=65001-65010/tcp --permanent <span class="comment">#永久增加65001-65010例外(区域public)</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --reload <span class="comment">#重启防火墙(修改配置后要重启防火墙)</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用systemctl安装自动启服务"><a href="#使用systemctl安装自动启服务" class="headerlink" title="使用systemctl安装自动启服务"></a>使用systemctl安装自动启服务</h2><p>在 <code>/usr/lib/systemd/system</code> 文件夹下建立文件 <code>shadowsocks.service</code>，文件内容如下：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=Shadowsocks Server</span><br><span class="line"><span class="attr">After</span>=network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=forking</span><br><span class="line"><span class="attr">PIDFile</span>=/var/shadowsocks/pid</span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/ssserver -c /var/shadowsocks/conf.json -d start</span><br><span class="line"><span class="attr">ExecReload</span>=/usr/bin/ssserver -c /var/shadowsocks/conf.json -d restart</span><br><span class="line"><span class="attr">ExecStop</span>=/usr/bin/ssserver -d stop</span><br><span class="line"><span class="attr">PrivateTmp</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>给文件加上754权限：<code>chmod +754 shadowsocks.service</code>。</p>
+<ul>
+<li>用 <code>systemctl start shadowsocks.service</code> 就可以启动服务。</li>
+<li>用 <code>systemctl enable shadowsocks.service</code> 就可以启用自动启服务。<h2 id="apache死活报AH00035"><a href="#apache死活报AH00035" class="headerlink" title="apache死活报AH00035"></a>apache死活报AH00035</h2>比如<code>www</code>是放在<code>/home/xxx</code>下的，是因为<code>/home/xxx</code>没有加上组和访客的x。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 711 /home/xxx</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-about-joomla" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
@@ -230,47 +273,6 @@
 <p>寻找key: <code>Last 5 characters of installed product key:XXXXX</code></p>
 <p>删除key: <code>cscript ospp.vbs /unpkey:XXXXX</code></p>
 <h2 id="删除自带软件"><a href="#删除自带软件" class="headerlink" title="删除自带软件"></a>删除自带软件</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-AppxPackage</span> *music* | <span class="built_in">Remove-AppxPackage</span></span><br></pre></td></tr></table></figure>
-      
-
-      
-        
-    </div>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-about-zlib-libzip" class="article article-type-post" itemscope itemprop="blogPost">
-  
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/12/about-zlib-libzip/">关于windows下编译zlib和libzip</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      <a href="/2021/01/12/about-zlib-libzip/" class="article-date">
-  <time datetime="2021-01-12T00:33:48.000Z" itemprop="datePublished">2021-01-12</time>
-</a>
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-先安装cmake"><a href="#1-先安装cmake" class="headerlink" title="1. 先安装cmake"></a>1. 先安装cmake</h2><p>一路默认</p>
-<h2 id="2-再编译zlib"><a href="#2-再编译zlib" class="headerlink" title="2. 再编译zlib"></a>2. 再编译zlib</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake .. <span class="literal">-G</span><span class="string">&quot;Visual Studio 16 2019&quot;</span> <span class="literal">-A</span><span class="string">&quot;Win32&quot;</span> <span class="literal">-DCMAKE_PREFIX_PATH</span>=<span class="string">&quot;C:/Users/singl/Codes/zip&quot;</span></span><br></pre></td></tr></table></figure>
-<p>去vs的命令行下编译</p>
-<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msbuild /P:<span class="keyword">Configuration</span>=<span class="keyword">Release</span> INSTALL.vcxproj</span><br></pre></td></tr></table></figure>
-<h2 id="3-再编译libzip"><a href="#3-再编译libzip" class="headerlink" title="3. 再编译libzip"></a>3. 再编译libzip</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake .. <span class="literal">-G</span><span class="string">&quot;Visual Studio 16 2019&quot;</span> <span class="literal">-A</span><span class="string">&quot;Win32&quot;</span> <span class="literal">-DCMAKE_PREFIX_PATH</span>=<span class="string">&quot;C:/Users/singl/Codes/libzip&quot;</span> <span class="literal">-DZLIB_LIBRARY</span>=<span class="string">&quot;C:/Users/singl/Codes/zlib/lib/zlib.lib&quot;</span> <span class="literal">-DZLIB_INCLUDE_DIR</span>=<span class="string">&quot;C:/Users/singl/Codes/zlib/include&quot;</span></span><br></pre></td></tr></table></figure>
-<p>去vs的命令行下编译</p>
-<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msbuild /P:<span class="keyword">Configuration</span>=<span class="keyword">Release</span> INSTALL.vcxproj</span><br></pre></td></tr></table></figure>
       
 
       

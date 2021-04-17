@@ -3,6 +3,28 @@
   
     
     <entry>
+      <title>关于CentOS的操作和坑</title>
+      <link href="/2021/04/17/about-centos/"/>
+      <content type="html"><![CDATA[<h2 id="CentOS7以上的firewalld"><a href="#CentOS7以上的firewalld" class="headerlink" title="CentOS7以上的firewalld"></a>CentOS7以上的firewalld</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo firewall-cmd --query-port=8080/tcp <span class="comment"># 查询端口是否开放</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --add-port=80/tcp --permanent <span class="comment">#永久添加80端口例外(全局)</span></span><br><span class="line">sudo firewall-cmd --remove-port=80/tcp --permanent <span class="comment">#永久删除80端口例外(全局)</span></span><br><span class="line">sudo firewall-cmd --add-port=65001-65010/tcp --permanent <span class="comment">#永久增加65001-65010例外(全局)</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --zone=public --add-port=80/tcp --permanent <span class="comment">#永久添加80端口例外(区域public)</span></span><br><span class="line">sudo firewall-cmd --zone=public --remove-port=80/tcp --permanent <span class="comment">#永久删除80端口例外(区域public)</span></span><br><span class="line">sudo firewall-cmd --zone=public --add-port=65001-65010/tcp --permanent <span class="comment">#永久增加65001-65010例外(区域public)</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --reload <span class="comment">#重启防火墙(修改配置后要重启防火墙)</span></span><br></pre></td></tr></table></figure><h2 id="使用systemctl安装自动启服务"><a href="#使用systemctl安装自动启服务" class="headerlink" title="使用systemctl安装自动启服务"></a>使用systemctl安装自动启服务</h2><p>在 <code>/usr/lib/systemd/system</code> 文件夹下建立文件 <code>shadowsocks.service</code>，文件内容如下：</p><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=Shadowsocks Server</span><br><span class="line"><span class="attr">After</span>=network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=forking</span><br><span class="line"><span class="attr">PIDFile</span>=/var/shadowsocks/pid</span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/ssserver -c /var/shadowsocks/conf.json -d start</span><br><span class="line"><span class="attr">ExecReload</span>=/usr/bin/ssserver -c /var/shadowsocks/conf.json -d restart</span><br><span class="line"><span class="attr">ExecStop</span>=/usr/bin/ssserver -d stop</span><br><span class="line"><span class="attr">PrivateTmp</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure><p>给文件加上754权限：<code>chmod +754 shadowsocks.service</code>。</p><ul><li>用 <code>systemctl start shadowsocks.service</code> 就可以启动服务。</li><li>用 <code>systemctl enable shadowsocks.service</code> 就可以启用自动启服务。<h2 id="apache死活报AH00035"><a href="#apache死活报AH00035" class="headerlink" title="apache死活报AH00035"></a>apache死活报AH00035</h2>比如<code>www</code>是放在<code>/home/xxx</code>下的，是因为<code>/home/xxx</code>没有加上组和访客的x。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 711 /home/xxx</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+      
+      
+        <tags>
+            
+            <tag> centos </tag>
+            
+            <tag> apache </tag>
+            
+            <tag> nginx </tag>
+            
+            <tag> systemctl </tag>
+            
+            <tag> firewall </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>关于Joomla的应用与部署</title>
       <link href="/2021/04/15/about-joomla/"/>
       <content type="html"><![CDATA[<h2 id="Ubuntu-20-04-和-php-的相关准备"><a href="#Ubuntu-20-04-和-php-的相关准备" class="headerlink" title="Ubuntu 20.04 和 php 的相关准备"></a>Ubuntu 20.04 和 php 的相关准备</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install php-pgsql</span><br><span class="line">sudo apt install php-mysql</span><br></pre></td></tr></table></figure><h2 id="处理-www-data-的权限"><a href="#处理-www-data-的权限" class="headerlink" title="处理 www-data 的权限"></a>处理 www-data 的权限</h2><p>建立<code>www</code>文件夹，比如<code>/home/xxx/www</code></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R xxx.www-data /home/xxx/www</span><br><span class="line"><span class="built_in">cd</span> /home/xxx/www</span><br><span class="line">find . -<span class="built_in">type</span> d -<span class="built_in">exec</span> chmod 2775 &#123;&#125; \;</span><br><span class="line">find . -<span class="built_in">type</span> f -<span class="built_in">exec</span> chmod 0664 &#123;&#125; \;</span><br></pre></td></tr></table></figure><h2 id="修改-apache-配置，加主文件夹操作权限"><a href="#修改-apache-配置，加主文件夹操作权限" class="headerlink" title="修改 apache 配置，加主文件夹操作权限"></a>修改 apache 配置，加主文件夹操作权限</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Directory</span> &quot;/<span class="attr">home</span>/<span class="attr">yangxc</span>/<span class="attr">www</span>/<span class="attr">crca</span>&quot;&gt;</span></span><br><span class="line">    AllowOverride All</span><br><span class="line">    Order allow,deny</span><br><span class="line">    Allow from all</span><br><span class="line">    Require all granted</span><br><span class="line"><span class="tag">&lt;/<span class="name">Directory</span>&gt;</span></span><br></pre></td></tr></table></figure>]]></content>
@@ -147,22 +169,6 @@
             <tag> CentOS </tag>
             
             <tag> PostgreSQL </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>CentOS下firewall操作指令</title>
-      <link href="/2020/12/06/CentOS-firewall/"/>
-      <content type="html"><![CDATA[<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo firewall-cmd --query-port=8080/tcp <span class="comment"># 查询端口是否开放</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --add-port=80/tcp --permanent <span class="comment">#永久添加80端口例外(全局)</span></span><br><span class="line">sudo firewall-cmd --remove-port=80/tcp --permanent <span class="comment">#永久删除80端口例外(全局)</span></span><br><span class="line">sudo firewall-cmd --add-port=65001-65010/tcp --permanent <span class="comment">#永久增加65001-65010例外(全局)</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --zone=public --add-port=80/tcp --permanent <span class="comment">#永久添加80端口例外(区域public)</span></span><br><span class="line">sudo firewall-cmd --zone=public --remove-port=80/tcp --permanent <span class="comment">#永久删除80端口例外(区域public)</span></span><br><span class="line">sudo firewall-cmd --zone=public --add-port=65001-65010/tcp --permanent <span class="comment">#永久增加65001-65010例外(区域public)</span></span><br><span class="line"></span><br><span class="line">sudo firewall-cmd --reload <span class="comment">#重启防火墙(修改配置后要重启防火墙)</span></span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-        <tags>
-            
-            <tag> CentOS </tag>
-            
-            <tag> firewall </tag>
             
         </tags>
       
@@ -329,26 +335,6 @@
             <tag> hbase </tag>
             
             <tag> oracle </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>CentOS 7 利用 systemctl 安装自动启服务</title>
-      <link href="/2017/08/15/centos7-systemctl/"/>
-      <content type="html"><![CDATA[<p>在 <code>/usr/lib/systemd/system</code> 文件夹下建立文件 <code>shadowsocks.service</code>，文件内容如下：</p><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=Shadowsocks Server</span><br><span class="line"><span class="attr">After</span>=network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=forking</span><br><span class="line"><span class="attr">PIDFile</span>=/var/shadowsocks/pid</span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/ssserver -c /var/shadowsocks/conf.json -d start</span><br><span class="line"><span class="attr">ExecReload</span>=/usr/bin/ssserver -c /var/shadowsocks/conf.json -d restart</span><br><span class="line"><span class="attr">ExecStop</span>=/usr/bin/ssserver -d stop</span><br><span class="line"><span class="attr">PrivateTmp</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure><p>给文件加上754权限：<code>chmod +754 shadowsocks.service</code>。</p><ul><li>用 <code>systemctl start shadowsocks.service</code> 就可以启动服务。</li><li>用 <code>systemctl enable shadowsocks.service</code> 就可以启用自动启服务。</li></ul>]]></content>
-      
-      
-        <tags>
-            
-            <tag> CentOS </tag>
-            
-            <tag> systemctl </tag>
-            
-            <tag> 自启动 </tag>
-            
-            <tag> 服务 </tag>
             
         </tags>
       
