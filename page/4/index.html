@@ -332,7 +332,7 @@
 
 
   
-    <article id="post-about-hbase" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-centos7-systemctl" class="article article-type-post" itemscope itemprop="blogPost">
   
   <div class="article-inner">
     
@@ -340,22 +340,28 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/03/about-hbase/">hbase使用笔记</a>
+      <a class="article-title" href="/2017/08/15/centos7-systemctl/">CentOS 7 利用 systemctl 安装自动启服务</a>
     </h1>
   
 
       </header>
     
     <div class="article-meta">
-      <a href="/2017/08/03/about-hbase/" class="article-date">
-  <time datetime="2017-08-03T03:17:29.000Z" itemprop="datePublished">2017-08-03</time>
+      <a href="/2017/08/15/centos7-systemctl/" class="article-date">
+  <time datetime="2017-08-15T12:45:41.000Z" itemprop="datePublished">2017-08-15</time>
 </a>
       
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>记完hive后来点hbase的</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sqoop import --connect <span class="string">&#x27;jdbc:sqlserver://192.168.1.xxx;username=sa;password=xxx;DatabaseName=xxx&#x27;</span> --table sourcetablename --hbase-table hbasetablename --column-family cfname --split-by keycolumn --hbase-row-key rowkeycolumn --hbase-create-table</span></span><br></pre></td></tr></table></figure>
+        <p>在 <code>/usr/lib/systemd/system</code> 文件夹下建立文件 <code>shadowsocks.service</code>，文件内容如下：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=Shadowsocks Server</span><br><span class="line"><span class="attr">After</span>=network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=forking</span><br><span class="line"><span class="attr">PIDFile</span>=/var/shadowsocks/pid</span><br><span class="line"><span class="attr">ExecStart</span>=/usr/bin/ssserver -c /var/shadowsocks/conf.json -d start</span><br><span class="line"><span class="attr">ExecReload</span>=/usr/bin/ssserver -c /var/shadowsocks/conf.json -d restart</span><br><span class="line"><span class="attr">ExecStop</span>=/usr/bin/ssserver -d stop</span><br><span class="line"><span class="attr">PrivateTmp</span>=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>给文件加上754权限：<code>chmod +754 shadowsocks.service</code>。</p>
+<ul>
+<li>用 <code>systemctl start shadowsocks.service</code> 就可以启动服务。</li>
+<li>用 <code>systemctl enable shadowsocks.service</code> 就可以启用自动启服务。</li>
+</ul>
+
       
 
       

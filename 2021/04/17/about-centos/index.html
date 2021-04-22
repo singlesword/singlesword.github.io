@@ -13,7 +13,7 @@
 <meta property="og:description" content="CentOS7以上的firewalld1234567891011sudo firewall-cmd --query-port&#x3D;8080&#x2F;tcp # 查询端口是否开放sudo firewall-cmd --add-port&#x3D;80&#x2F;tcp --permanent #永久添加80端口例外(全局)sudo firewall-cmd --remove-port&#x3D;80&#x2F;tcp --permanent #永久删">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-04-17T10:59:39.000Z">
-<meta property="article:modified_time" content="2021-04-17T11:15:04.971Z">
+<meta property="article:modified_time" content="2021-04-17T11:42:13.340Z">
 <meta property="article:author" content="YangXC">
 <meta property="article:tag" content="centos">
 <meta property="article:tag" content="apache">
@@ -73,7 +73,7 @@
 <ul>
 <li>用 <code>systemctl start shadowsocks.service</code> 就可以启动服务。</li>
 <li>用 <code>systemctl enable shadowsocks.service</code> 就可以启用自动启服务。<h2 id="apache死活报AH00035"><a href="#apache死活报AH00035" class="headerlink" title="apache死活报AH00035"></a>apache死活报AH00035</h2>比如<code>www</code>是放在<code>/home/xxx</code>下的，是因为<code>/home/xxx</code>没有加上组和访客的x。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 711 /home/xxx</span><br></pre></td></tr></table></figure>
-SELinux和Apache的配置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chcon -R -t httpd_sys_content_t &#x2F;path</span><br></pre></td></tr></table></figure></li>
+SELinux和Apache的配置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chcon -R -t httpd_sys_content_t &#x2F;path</span><br><span class="line">setsebool -P httpd_can_network_connect 1</span><br></pre></td></tr></table></figure></li>
 </ul>
 
       
