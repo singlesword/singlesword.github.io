@@ -13,9 +13,12 @@
 <meta property="og:description" content="CentOS7上安装mysql8先在官网下载个repo，安装repo，然后更新一下yum 12sudo yum clean allsudo yum makecache 查看一下 1yum repolist all | grep mysql 保证8是enable状态，可以修改 123yum-config-manager --disable mysql80-communityyum-config-ma">
 <meta property="og:locale">
 <meta property="article:published_time" content="2020-05-04T03:56:31.000Z">
-<meta property="article:modified_time" content="2021-04-13T02:59:22.284Z">
+<meta property="article:modified_time" content="2021-05-04T12:21:27.997Z">
 <meta property="article:author" content="YangXC">
+<meta property="article:tag" content="centos">
 <meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="ubuntu">
+<meta property="article:tag" content="Ubuntu">
 <meta property="article:tag" content="mysql">
 <meta name="twitter:card" content="summary">
   
@@ -79,6 +82,7 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> root@<span class="string">&#x27;localhost&#x27;</span> <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">&#x27;xxSS@@322434&#x27;</span>;</span><br><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">&#x27;validate_password%&#x27;</span>;</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> validate_password.policy=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> validate_password.length=<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 <p>记一要配置下字符集</p>
 <figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[client]</span></span><br><span class="line"><span class="attr">default-character-set</span>=utf8mb4</span><br><span class="line"></span><br><span class="line"><span class="section">[mysql]</span></span><br><span class="line"><span class="attr">default-character-set</span>=utf8mb4</span><br><span class="line"></span><br><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">character-set-server</span>=utf8mb4</span><br><span class="line"><span class="attr">collation-server</span>=utf8mb4_unicode_ci</span><br></pre></td></tr></table></figure>
+<h2 id="Ubuntu-20-04安装mysql"><a href="#Ubuntu-20-04安装mysql" class="headerlink" title="Ubuntu 20.04安装mysql"></a>Ubuntu 20.04安装mysql</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install mysql-server</span><br><span class="line">sudo systemctl start mysql</span><br><span class="line">sudo mysql_secure_installation</span><br></pre></td></tr></table></figure>
       
 
       

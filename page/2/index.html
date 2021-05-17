@@ -257,6 +257,8 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create user xxx;</span><br></pre></td></tr></table></figure>
 <p>赋权</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grant all privileges on database xxx to xxx;</span><br></pre></td></tr></table></figure>
+<p>只读权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE ROLE readaccess;</span><br><span class="line">GRANT USAGE ON SCHEMA public TO readaccess;</span><br><span class="line">GRANT SELECT ON ALL TABLES IN SCHEMA public TO readaccess;</span><br><span class="line">ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO readaccess;</span><br><span class="line">GRANT readaccess TO xxx;</span><br></pre></td></tr></table></figure>
       
 
       
